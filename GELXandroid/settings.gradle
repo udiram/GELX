@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "GELX-android"
+rootProject.name = "GELX"
