@@ -3,6 +3,7 @@ package com.gelx.gelx_droid.data;
 import android.util.Log;
 
 import com.gelx.gelx_droid.data.model.XY;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 
@@ -22,8 +23,8 @@ public class XYDataProvider {
     }
 
     public static void sendDataToServer() {
-        JSONArray jsonArray = new JSONArray(xyDataList);
-        Log.i("JSON", jsonArray.toString());
+        String jsonArrayString = new Gson().toJson(xyDataList);
+        Log.i("JSON", jsonArrayString);
     }
 
     public static void printDataList(){

@@ -8,9 +8,13 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.gelx.gelx_droid.data.XYDataProvider;
 
 public class ContrastActivity extends AppCompatActivity {
 
@@ -29,7 +33,8 @@ public class ContrastActivity extends AppCompatActivity {
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                imageView.setImageBitmap(changeBitmapContrastBrightness(BitmapFactory.decodeResource(getResources(), R.drawable.gelx), (float) progress / 100f, 1));
+
+                imageView.setImageBitmap(changeBitmapContrastBrightness(BitmapFactory.decodeResource(getResources(), R.drawable.gelx), (float) progress / 100f, 1000));
                 textView.setText("Contrast: "+(float) progress / 100f);
             }
 
@@ -54,12 +59,20 @@ public class ContrastActivity extends AppCompatActivity {
                 });
 
         Bitmap ret = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+        int x = bmp.getWidth();
+        int y = bmp.getHeight();
+        int[] intArray = new int[x * y];
+        bmp.getPixels(intArray, 0, x, 0, 0, x, y);
+
+
+        ret.setPixels(intArray, 0,x,0,0,x,y);
+
 
         Canvas canvas = new Canvas(ret);
 
         Paint paint = new Paint();
         paint.setColorFilter(new ColorMatrixColorFilter(cm));
-        canvas.drawBitmap(bmp, 0, 0, paint);
+        canvas.drawBitmap(ret, 0, 0, paint);
 
         return ret;
     }

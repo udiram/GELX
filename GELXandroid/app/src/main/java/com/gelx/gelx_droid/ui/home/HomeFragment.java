@@ -9,6 +9,8 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -76,8 +78,14 @@ public class HomeFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        seekbar.setMax(200);
+        seekbar.setMax(2000);
         seekbar.setProgress(100);
+
+        final Drawable[] layers = new Drawable[2];
+
+        final Canvas c;
+        final Bitmap bm2;
+
 
         uploadImg.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -97,6 +105,25 @@ public class HomeFragment extends Fragment {
                 XYDataProvider.addData(data);
                 XYDataProvider.sendDataToServer();
 
+                Bitmap bm = ((BitmapDrawable)uploadImg.getDrawable()).getBitmap();
+
+
+                Bitmap.Config config = bm.getConfig();
+                int width = bm.getWidth();
+                int height = bm.getHeight();
+
+                Bitmap bm2 = Bitmap.createBitmap(width, height, config);
+                Canvas c = new Canvas(bm2);
+
+                c.drawBitmap(bm, 0, 0, null);
+                Paint p = new Paint();
+
+
+                Bitmap repeat = BitmapFactory.decodeResource(getResources(), R.drawable.gelx);
+                Bitmap repeat2 = Bitmap.createScaledBitmap(repeat, 50, 50, false);
+                c.drawBitmap(repeat2, touchX, touchY,p);
+
+                uploadImg.setImageBitmap(bm2);
 
                 return false;
 
