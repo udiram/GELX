@@ -1,10 +1,10 @@
 package com.gelx.gelx_droid.data.model;
 
 public class XY {
-    public int x;
-    public int y;
+    public float x;
+    public float y;
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
@@ -12,7 +12,7 @@ public class XY {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
