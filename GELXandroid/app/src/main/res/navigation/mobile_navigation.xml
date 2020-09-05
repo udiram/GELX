@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/navigation_ladder_list"
+        android:name="com.gelx.gelx_droid.LadderListFragment"
+        android:label="LadderList"
+        tools:layout="@layout/fragment_ladder_list" />
+
+    <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.gelx.gelx_droid.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"

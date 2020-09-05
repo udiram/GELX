@@ -67,7 +67,6 @@ public class XYDataProvider {
         };
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-//        queue.start();
 
     }
 
