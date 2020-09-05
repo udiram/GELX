@@ -123,4 +123,4 @@ STATIC_URL = '/static/'
 
 PROJECT_APP_PATH = os.path.dirname(os.path.abspath(__file__))
 
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 524288000

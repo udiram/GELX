@@ -9,7 +9,11 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('add/', views.add, name='add'),
     path('analysis/', views.analysis, name='analysis'),
-    path('upload/', views.image_upload_view)
+    path('upload/', views.image_upload_view),
+    path('<int:user_id>/', views.user, name='user'),
+    path('user/', views.addUser, name='addUser'),
+    path('ladder/', views.addLadder, name='addLadder'),
+    path('image/', views.addImage, name='addImage')
 
 ]
 
