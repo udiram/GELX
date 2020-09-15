@@ -13,6 +13,7 @@ urlpatterns = [
     path('<int:user_id>/', views.user, name='user'),
     path('user/', views.addUser, name='addUser'),
     path('ladder/', views.addLadder, name='addLadder'),
+    path('deleteLadder/', views.removeLadder, name='deleteLadder'),
     path('image/', views.addImage, name='addImage')
 
 ]

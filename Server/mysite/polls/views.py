@@ -88,6 +88,18 @@ def addLadder(request):
 
 
 @csrf_exempt
+def removeLadder(request):
+    if request.method == "POST":
+        body_unicode = request.body.decode('utf-8')
+        json_data = json.loads(body_unicode)
+        l = LadderData(user_id=json_data['user_id'], ladder_point=json_data['ladder_point'],
+                       ladder_length=json_data['ladder_length'])
+        l.delete()
+
+        return HttpResponse("Ladder data deleted successfully" + str(l.user_id))
+
+
+@csrf_exempt
 def addImage(request):
 
     ts = datetime.now().timestamp()
@@ -104,4 +116,4 @@ def addImage(request):
         )
         i.save()
 
-        return HttpResponse("image data saved successfully" + str(i.job_id))
+        return HttpResponse("image data saved successfully," + " " + "job id:" + " " + str(i.job_id))
