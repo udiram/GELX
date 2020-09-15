@@ -1,6 +1,5 @@
 package com.gelx.gelx_droid.ui.dashboard;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 
 import com.gelx.gelx_droid.R;
-import com.gelx.gelx_droid.data.XYDataProvider;
 
 public class DashboardFragment extends Fragment {
 

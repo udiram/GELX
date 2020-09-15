@@ -10,6 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.gelx.gelx_droid.data.model.ImageData;
 import com.gelx.gelx_droid.data.model.XY;
 import com.google.gson.Gson;
 
@@ -17,9 +18,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class XYDataProvider {
+public class DataProvider {
 
     private static final String sendDataUrl = "http://10.0.2.2:8000/polls/analysis/";
+    private static final String sendImageURL = "http://10.0.2.2:8000/polls/image/";
 
     private static List<XY> xyDataList = new ArrayList<>();
 
@@ -37,6 +39,36 @@ public class XYDataProvider {
         } else {
             return false;
         }
+    }
+
+    public static void sendImageToServer(Context context, ImageData imageData) {
+        final String jsonString = new Gson().toJson(imageData);
+        Log.i("JSON", jsonString);
+
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, sendImageURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.i("Image Sent", response);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Image Sent", "error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return jsonString.getBytes();
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
     }
 
 

@@ -36,6 +36,8 @@ public class LadderListFragment extends Fragment {
     ItemArrayAdapter itemArrayAdapter;
 
     private static final String sendDataUrl = "http://10.0.2.2:8000/polls/ladder/";
+    private static final String removeDataURL = "http://10.0.2.2:8000/polls/deleteLadder/";
+
 
     public LadderListFragment() {
         // Required empty public constructor
@@ -124,9 +126,44 @@ public class LadderListFragment extends Fragment {
     }
 
     private void deleteLadderData(int index) {
-        itemList.remove(index);
+        LadderData ladderData  = itemList.get(index);
+        itemList.remove(ladderData);
         itemArrayAdapter.notifyDataSetChanged();
+        deleteLadderDataFromServer(ladderData);
     }
+
+    private void deleteLadderDataFromServer(LadderData ladderData) {
+        ladderData.setUser_id(-1);
+        final String ladderJson = new Gson().toJson(ladderData);
+        Log.i("JSON", ladderJson);
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, removeDataURL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.i("Data Deleted", response);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Data Deleted", "error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return ladderJson.getBytes();
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+
+    }
+
 
     private void sendLadderData(LadderData ladderData){
         ladderData.setUser_id(-1);

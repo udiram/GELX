@@ -2,7 +2,6 @@ package com.gelx.gelx_droid.ui.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
@@ -10,13 +9,12 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -31,27 +29,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.gelx.gelx_droid.ContrastActivity;
 import com.gelx.gelx_droid.R;
-import com.gelx.gelx_droid.data.XYDataProvider;
+import com.gelx.gelx_droid.data.DataProvider;
+import com.gelx.gelx_droid.data.model.ImageData;
 import com.gelx.gelx_droid.data.model.XY;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.OnSingleFlingListener;
 import com.github.chrisbanes.photoview.PhotoView;
 
-import static com.gelx.gelx_droid.ContrastActivity.changeBitmapContrastBrightness;
+import java.io.ByteArrayOutputStream;
+import java.util.Random;
 
 public class HomeFragment extends Fragment {
     private static final int RESULT_LOAD_IMAGE = 1000;
@@ -64,11 +54,6 @@ public class HomeFragment extends Fragment {
 
     Canvas canvas;
     Paint paint;
-
-    float downx = 0;
-    float downy = 0;
-    float upx = 0;
-    float upy = 0;
 
     static final String PHOTO_TAP_TOAST_STRING = "Photo Tap! X: %.2f %% Y:%.2f %% ID: %d";
     static final String SCALE_TOAST_STRING = "Scaled to: %.2ff";
@@ -90,13 +75,12 @@ public class HomeFragment extends Fragment {
         sendDataBtn = root.findViewById(R.id.sendDataBtn);
         sendDataBtn.setVisibility(View.GONE);
         final Button clearBtn = root.findViewById(R.id.clearButton);
-        uploadImg = root.findViewById(R.id.uploadedImageView);
+        uploadImg = (PhotoView) root.findViewById(R.id.uploadedImageView);
         seekbar = (SeekBar) root.findViewById(R.id.seekbar);
         contrastval = (TextView) root.findViewById(R.id.contrastValue);
-//
 
         uploadImg.setOnPhotoTapListener(new PhotoTapListener());
-        uploadImg.setOnSingleFlingListener(new SingleFlingListener());
+        //uploadImg.setOnSingleFlingListener(new SingleFlingListener());
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -173,7 +157,7 @@ public class HomeFragment extends Fragment {
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                XYDataProvider.clearDataList();
+                DataProvider.clearDataList();
                 uploadImg.setImageBitmap(bitmap);
                 sendDataBtn.setVisibility(View.GONE);
                 seekbar.setProgress(100);
@@ -185,7 +169,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 sendDataBtn.setVisibility(View.GONE);
 
-                XYDataProvider.clearDataList();
+                DataProvider.clearDataList();
 
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -197,7 +181,24 @@ public class HomeFragment extends Fragment {
         sendDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                XYDataProvider.sendDataToServer(getActivity());
+                DataProvider.sendDataToServer(getActivity());
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                Bitmap bitmap = ((BitmapDrawable)uploadImg.getDrawable()).getBitmap();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                String imageString = Base64.encodeToString(imageBytes, Base64.URL_SAFE);
+
+                final Random numRandom = new Random();
+
+                int job_id = numRandom.nextInt(10000);
+
+                ImageData imageData = new ImageData();
+                imageData.setJob_id(job_id);
+                imageData.setImage(imageString);
+
+
+                DataProvider.sendImageToServer(getActivity(), imageData);
             }
         });
 
@@ -311,9 +312,9 @@ public class HomeFragment extends Fragment {
 
             String percentages = xPercentage + " " + yPercentage + " " + data.x + " " + data.y;
 
-//                Toast.makeText(getActivity(),percentages, Toast.LENGTH_LONG ).show();
+                Toast.makeText(getActivity(),percentages, Toast.LENGTH_LONG ).show();
 
-            boolean canAddData = XYDataProvider.addData(data);
+            boolean canAddData = DataProvider.addData(data);
 
 
             if (canAddData == false) {

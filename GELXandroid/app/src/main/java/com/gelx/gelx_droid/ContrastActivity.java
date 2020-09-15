@@ -9,12 +9,9 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.gelx.gelx_droid.data.XYDataProvider;
 
 public class ContrastActivity extends AppCompatActivity {
 
