@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "645563293174",
+    "firebase_url": "https://gelx-fada9.firebaseio.com",
+    "project_id": "gelx-fada9",
+    "storage_bucket": "gelx-fada9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645563293174:android:8e1847d2745da6647ffbd7",
+        "android_client_info": {
+          "package_name": "com.gelx.gelx_droid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645563293174-mhaqba51i8p37uijivioi2vb434s7vu2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB78w_NOaPGj-rnfydHKgfRWwWYMa3GM2A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645563293174-mhaqba51i8p37uijivioi2vb434s7vu2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
