@@ -15,7 +15,9 @@ import com.gelx.gelx_droid.data.model.XY;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class DataProvider {
@@ -64,6 +66,13 @@ public class DataProvider {
             @Override
             public byte[] getBody() throws AuthFailureError {
                 return jsonString.getBytes();
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("auth-key", "1234");
+                return params;
             }
         };
         // Add the request to the RequestQueue.

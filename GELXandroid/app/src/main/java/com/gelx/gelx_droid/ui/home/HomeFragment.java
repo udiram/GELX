@@ -78,7 +78,6 @@ public class HomeFragment extends Fragment {
         uploadImg = (PhotoView) root.findViewById(R.id.uploadedImageView);
         seekbar = (SeekBar) root.findViewById(R.id.seekbar);
         contrastval = (TextView) root.findViewById(R.id.contrastValue);
-
         uploadImg.setOnPhotoTapListener(new PhotoTapListener());
         //uploadImg.setOnSingleFlingListener(new SingleFlingListener());
 

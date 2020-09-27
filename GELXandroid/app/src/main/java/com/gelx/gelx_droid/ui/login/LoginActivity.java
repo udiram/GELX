@@ -35,6 +35,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.ActionCodeSettings;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,6 +48,28 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+
+        Button email = findViewById(R.id.email);
+
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ActionCodeSettings actionCodeSettings =
+                        ActionCodeSettings.newBuilder()
+                                // URL you want to redirect back to. The domain (www.example.com) for this
+                                // URL must be whitelisted in the Firebase Console.
+                                .setUrl("https://synth-med.com")
+                                // This must be true
+                                .setHandleCodeInApp(true)
+                                .setIOSBundleId("com.example.ios")
+                                .setAndroidPackageName(
+                                        "com.example.android",
+                                        true, /* installIfNotAvailable */
+                                        "12"    /* minimumVersion */)
+                                .build();
+            }
+        });
 
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -61,8 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            Intent success = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(success);
+            startHomeActivity();
         }
 
 
@@ -81,6 +103,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
+    private void startHomeActivity() {
+        Intent success = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(success);
+        finish();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -99,8 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            Intent success = new Intent(LoginActivity.this, HomeActivity.class);
-            startActivity(success);
+            startHomeActivity();
 
         Log.w("Google login successful", "signInResult:account id=" + account.getId() );
         } catch (ApiException e) {
